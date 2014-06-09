@@ -7,7 +7,7 @@
 			context : null,
 			notes: null,
 			sounds : [],
-			configNotesUrl: '/piano-live/notes.json',
+			configNotesUrl: '/server/piano-live/notes.json',
 			notesLoaded: false,
 			octave: '0',
 			enumNotes : {
@@ -22,9 +22,8 @@
 
 			getUrl : function (id) {
 				if (id)
-					return '/piano-live/audio/'+ id +'.wav.mp3';
-				else 
-					return false;
+					return '/server/piano-live/audio/'+ id +'.wav.mp3';
+				return false;
 			},
 
 			getSound : function (id, delayTime) {
@@ -34,23 +33,27 @@
 					bufferAudio = null,
 					context = self.context;
 
-				request.open('GET', urlRequest, true);
-				request.responseType = 'arraybuffer';
+				if(urlRequest) {
+					
+					request.open('GET', urlRequest, true);
+					request.responseType = 'arraybuffer';
 
-				request.onload = function() {
-					context.decodeAudioData(request.response, function(buffer) {
-						var sound = {
-							id : id,
-							buffer : buffer
-						};
+					request.onload = function() {
+						context.decodeAudioData(request.response, function(buffer) {
+							var sound = {
+								id : id,
+								buffer : buffer
+							};
 
-						self.sounds.push(sound);
-						self.playSound(buffer);
+							self.sounds.push(sound);
+							self.playSound(buffer);
 
-					});
+						});
+					}
+
+					request.send();
+
 				}
-
-				request.send();
 
 			}, 
 
@@ -105,7 +108,12 @@
 				var self = this,
 					text = textToDecode.toLowerCase(),
 					splitedText = text.split(''),
-					splitedTextLength = splitedText.length;
+					splitedTextLength = splitedText.length,
+					regexForNumber = new RegExp('^[0-9]$'),
+					note = '',
+					letter = '',
+					number = null,
+					sound = null;
 
 				if (splitedTextLength > 0) {
 
@@ -115,17 +123,38 @@
 							self.loadConfigNotes();
 						} 
 
-						var note = '',
-							letter = splitedText[i];
+						letter = splitedText[i];
 
-						note = self.getNoteByLetter(letter);
+						if (regexForNumber.test(letter)) {
+							number = parseInt(letter, 10);
 
-						if ( note ) {
-							var sound = self.notes[self.octave][note];
-							console.log(note, sound);
-							self.loadSound(sound);
-							PianoUtils.sleep(500);
+							if (number >= 0 && number <= 8) { //oitavas de 1 a 7
+								self.setOctave(number);
+							}
+
+						} else {
+
+							note = self.getNoteByLetter(letter);
+
+							if ( note ) {
+
+								if( self.octave == '8' ) {
+									if (note == 'la' && note == 'si' ) {
+										sound = self.notes[self.octave][note];
+										console.log(note, sound);
+										self.loadSound(sound);
+										PianoUtils.sleep(250);
+									}
+
+								} else {
+									sound = self.notes[self.octave][note];
+									console.log(note, sound);
+									self.loadSound(sound);
+									PianoUtils.sleep(50);
+								}
+							}
 						}
+
 					}
 
 				} else {
@@ -142,6 +171,11 @@
 					return self.enumNotes[letter]
 				else
 					return undefined;
+			},
+
+			setOctave : function (octave) {
+				console.log('setOctave: ', octave);
+				this.octave = octave;
 			}
 		}
 	}

@@ -1,5 +1,2 @@
-sass-cache/*
-css/*
-js/build/*
+.sass-cache/*
 node_modules/*
-infos.txt

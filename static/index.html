@@ -12,7 +12,11 @@
 		</header>
 
 		<section>
-			<ul id="main-notes">
+			<div class="wrapper-loader hide">
+				<span class="info-loading">Carregando notas...</span>
+				<img src="icon/ajax-loader.gif" />
+			</div>
+			<ul id="main-notes" class="loading">
 				<li>
 					<a id='a7' href="#" class="">LA</a>
 					<a id='as7' href="#" class="sustenido"></a>
@@ -209,10 +213,61 @@
 				</li>
 			</ul>
 		</section>
-		<section class='control'>
-			<textarea class="sound-text"></textarea>
-			<button id="generate-sound">Gerar som</button>
+
+		<section class="tab-structure">
+			<header class="tab-header">
+				<ul>
+					<li class="tab active sound-generator">
+						<a href="#" id="sound-generator">Gerador de som</a>
+					</li>
+					<li class="tab oscillator">
+						<a href="#" id="oscillator">Osciladores</a>
+					</li>
+				</ul>
+			</header>
+			<div class="tab-content sound-generator">
+				<div class="box">
+					<textarea class="sound-text"></textarea>
+					<button id="generate-sound">Gerar som</button>
+				</div>
+			</div>
+			<div class="tab-content dn oscillator">
+				<div class="box">
+					<div class="left">
+						<label>Tipo de onda: </label>
+						<label for="fr">Frequência: </label>
+					</div>
+					<div class="right">
+						<select id="wave" class="">
+							<option value="0">sine</option>
+							<option value="1">square</option>
+							<option value="2">sawtooth</option>
+							<option value="3">triangle</option>
+						</select>
+						<input type="range" id="fr" name="fr" min="0" max="1000">
+					</div>
+					<div class="left">
+						<button id="create-oscillator">Criar oscilador</button>
+						<button id="stop-oscillator">Parar oscilador</button>
+					</div>
+				</div>
+			</div>
 		</section>
+
+		<div class="info-notes opaque">
+			<h3>Info caracteres</h3>
+			<ul>
+				<li>0 a 7  <span>Troca oitava</span></li>
+				<li>C/c  <span>DO</span></li>
+				<li>D/d  <span>RE</span></li>
+				<li>E/e  <span>MI</span></li>
+				<li>F/f  <span>FA</span></li>
+				<li>G/g  <span>SOL</span></li>
+				<li>A/a  <span>LA</span> </li>
+				<li>B/b  <span>SI</span></li>
+				<li>Espaço<span>Pausa 200ms</span></li>
+			</ul>
+		</div>
 		
 		<div id="scripts">
 			<script type="text/javascript" src="js/build/build.js"></script>

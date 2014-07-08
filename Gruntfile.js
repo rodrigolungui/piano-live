@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         },
 
         files: {
-          'css/style.css': 'scss/style.scss'
+          'static/css/style.css': 'scss/style.scss'
         }
       }
     },
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
         },
 
         scripts: {
-          files: ['js/*.js'],
+          files: ['javascripts/*.js'],
           tasks: ['concat']
         }
       },
@@ -35,8 +35,8 @@ module.exports = function(grunt) {
         },
 
         js : {
-          src: ['js/jquery-2.1.1.min.js', 'js/app.js', 'js/audio-component.js', 'js/utils.js'],
-          dest: 'js/build/build.js',
+          src: ['javascripts/jquery-2.1.1.min.js', 'javascripts/socket.io.js', 'javascripts/utils.js', 'javascripts/audio-component.js', 'javascripts/app.js'],
+          dest: 'static/js/build/build.js',
         }
       }
 
